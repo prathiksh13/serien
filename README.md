@@ -987,3 +987,5 @@ This project is licensed under the **ISC License**.
 <div align="center">
   <strong>Serien</strong> — Bridging minds through intelligent teleconsultation.
 </div>
+#   s e r i e n - f r o n t e n d  
+ 
