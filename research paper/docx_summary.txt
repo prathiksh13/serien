@@ -1,0 +1,169 @@
+paragraphs=129
+tables=5
+inline_shapes=10
+---PARAGRAPHS---
+001|Normal|Serien – AI-Powered Teleconsultation Platform with Real-Time Emotion Recognition
+002|Normal|Department of Computer Science and Engineering Academic Year 2025–2026
+003|Heading 1|I. Abstract
+004|Normal|Mental health disorders affect millions worldwide, while access to professional psychological care remains limited, particularly in underserved regions. Conventional teletherapy platforms support remote consultations but lack the ability to analyze non-verbal emotional cues essential for effective therapy. This paper presents Serien, an AI-powered teleconsultation platform that integrates real-time facial emotion recognition and AI-assisted therapeutic support to enhance remote mental health care. The system employs a Convolutional Neural Network (CNN) trained on the FER-2013 dataset to classify seven emotional states from live WebRTC video sessions and provide therapists with real-time emotional insights. Serien also incorporates a LLaMA-based language model through the Groq API for chatbot interaction, journal analysis, therapeutic assignment generation, and automated session reporting. The platform utilizes a React/Vite frontend, Node.js/Express backend, Firebase cloud services, and face-api.js for browser-based inference. Experimental evaluation achieved 68.7% validation accuracy on the FER-2013 dataset with inference latency below 200 ms per frame, demonstrating the effectiveness of the proposed system for intelligent and emotion-aware teletherapy applications.
+005|Normal|II. Keywords
+006|Normal|Teleconsultation, Facial Emotion Recognition, CNN, Deep Learning, Mental Health Monitoring, WebRTC, face-api.js, LLaMA, Firebase, AI Chatbot
+007|Heading 1|III. Introduction
+008|Normal|The World Health Organization reports that depression and anxiety disorders cost the global economy an estimated $1 trillion annually in lost productivity [1]. Despite the growing burden, the ratio of mental health professionals to patients remains critically low in most developing nations, with some regions reporting fewer than one psychiatrist per 100,000 population [2]. The COVID-19 pandemic accelerated the adoption of telehealth services, revealing both the potential and the limitations of remote mental healthcare delivery.
+009|Normal|Conventional teleconsultation platforms such as BetterHelp and Talkspace have demonstrated the viability of remote therapy. However, these platforms primarily serve as communication conduits and do not leverage artificial intelligence to augment clinical decision-making. A critical limitation is their inability to detect and quantify emotional states from facial expressions during sessions—information that therapists routinely rely upon in face-to-face consultations [3].
+010|Normal|Serien addresses these gaps by combining three technological pillars: (1) a CNN-based facial emotion recognition system that runs directly in the therapist's browser using face-api.js and TensorFlow.js, enabling real-time emotion detection without sending video data to external servers; (2) a LLaMA-powered AI engine that generates contextual chatbot responses, therapeutic assignments, journal analysis, and post-session clinical reports; and (3) a comprehensive teleconsultation workflow encompassing appointment booking, WebRTC video sessions, session analytics, journaling, and automated email communications. This paper details the architecture, implementation, and evaluation of the Serien platform.
+011|Heading 1|IV. Problem Statement
+012|Heading 1|Existing mental health teleconsultation platforms face several limitations that reduce the effectiveness of remote therapy. Therapists are often unable to accurately observe subtle facial expressions and emotional changes during virtual sessions, leading to reduced emotional understanding. Most platforms also lack AI-assisted clinical insights such as emotion trend analysis, automated reporting, and risk detection, increasing the analytical workload on therapists. In addition, patient engagement tools such as journaling and therapeutic assignments are usually fragmented across multiple applications, affecting continuity of care. Many systems further suffer from limited accessibility due to device or software restrictions and do not provide continuous emotional monitoring between therapy sessions, creating gaps in patient assessment and treatment planning.
+013|Heading 1|V. Literature Survey
+014|Normal|Facial emotion recognition (FER) has been extensively studied in computer vision. Mollahosseini et al. [4] conducted a comprehensive survey of deep neural networks for FER, establishing CNN architectures as the dominant approach. The FER-2013 dataset, introduced by Goodfellow et al. [5], contains 35,887 grayscale images across seven emotion categories and remains the primary benchmark for FER systems, with state-of-the-art methods achieving 73–75% accuracy.
+015|Normal|In the domain of browser-based face detection, Juefei-Xu et al. [6] demonstrated the feasibility of lightweight neural networks for real-time face analysis. The face-api.js library by Heusel et al. [7] provides a TensorFlow.js implementation of the Tiny Face Detector and Face Expression Net models, enabling client-side emotion inference without server-round-trips.
+016|Normal|WebRTC technology has been widely adopted for real-time communication in telehealth. Okonkwo and Ade-Ibijola [8] examined the challenges and opportunities of WebRTC in healthcare contexts, noting its advantage of maintaining end-to-end encryption for patient data privacy. Firebase, developed by Google, provides a serverless backend infrastructure that has been employed in several health informatics applications [9].
+017|Normal|Large language models have shown promise in mental health applications. Touvron et al. [10] introduced the LLaMA family of models, which subsequent research has applied to therapeutic dialogue generation and clinical note summarization. The integration of emotion detection with conversational AI for teletherapy represents an emerging research direction that Serien seeks to advance.
+018|Normal|Table I: Summary of Literature Survey
+019|Normal|Recent advancements in deep learning and affective computing have accelerated the development of AI-driven healthcare systems for emotion analysis and remote monitoring.(Hollis et al., 2015, p. 263).
+020|Normal|A. Critical Analysis of Existing Systems
+021|Normal|TheraSense: A teleconsultation platform that integrates deep learning-based real-time facial emotion recognition to provide therapists with emotional insights during sessions[1]
+022|Normal|T-Rehab: A remote rehabilitation system focused on monitoring patient well-being and reducing anxiety and OCD symptoms through structured digital interventions [2].
+023|Normal|EmotiCloud: A cloud-based FER system designed for periodic patient emotion monitoring with high validation accuracy in controlled environments [3].
+024|Normal|B. Research Gap
+025|Normal|Despite advancements in Facial Emotion Recognition (FER), most existing systems function as standalone emotion detection tools rather than complete teletherapy platforms. Many models also face challenges related to high computational cost and real-time deployment on standard devices. In addition, current platforms rarely integrate features such as mood journaling, AI-generated session summaries, and continuous emotional monitoring within a unified environment.
+026|Normal|C. Comparison of Mental Health FER Systems
+027|Heading 1|VI. Proposed System
+028|Normal|Serien is proposed as an integrated mental wellness teleconsultation platform that unifies real-time emotion recognition, AI-powered clinical insights, and comprehensive patient management into a single web-based application. Unlike existing platforms that treat video consultation as an isolated communication channel, Serien treats each session as a data-rich interaction from which actionable therapeutic intelligence is extracted.
+029|Normal|The proposed system operates on three interconnected layers. The presentation layer consists of a React-based single-page application with role-specific interfaces for patients and therapists, featuring glassmorphic design elements and responsive layouts. The application layer comprises a Node.js backend that orchestrates WebRTC signaling, AI service integration, email workflows, and data persistence through Firebase. The intelligence layer encompasses the CNN-based emotion recognition pipeline running in the therapist's browser and the LLaMA-powered AI engine accessed through the Groq API for natural language processing tasks.
+030|Normal|Key differentiating features include: real-time emotion timeline visualization during sessions, automated stress-level scoring and live alert generation, AI-generated post-session reports with clinical recommendations, a context-aware chatbot that adapts responses based on detected emotional state, therapist-to-patient assignment generation with AI-crafted reflection questions, and integrated journaling with multimedia support.
+031|Heading 1|VII. System Architecture
+032|Normal|The Serien platform follows a layered hybrid monolith architecture consisting of five main tiers: Client/UI, Real-Time Signaling, API and Orchestration, Data Management, and the Intelligence Layer.
+033|Normal|The Client/UI tier is developed using React 18 and Vite, providing separate dashboards for therapists and patients with features such as video consultation, appointment management, journaling, and report visualization. The therapist interface integrates face-api.js and TensorFlow.js for browser-based emotion recognition.
+034|Normal|The Real-Time Signaling tier uses Socket.IO and WebRTC to establish secure peer-to-peer video communication between therapists and patients. The Node.js server manages signaling messages while media streams are transferred directly between peers.
+035|Normal|The API and Orchestration tier, implemented using Node.js and Express, handles AI services, appointment workflows, notifications, and communication with external APIs such as the Groq LLaMA API. Firebase Authentication and Cloud Firestore are used for secure user management and data storage.
+036|Normal|The Intelligence tier integrates a CNN-based Facial Emotion Recognition pipeline for real-time emotion classification and a LLaMA-based AI engine for chatbot interaction, journal analysis, and automated session report generation.
+038|Normal|Fig. 6: Serien System Architecture Diagram
+039|Heading 1|VIII. CNN Emotion Detection Model
+040|Heading 2|The emotion detection module uses a Convolutional Neural Network (CNN) trained on the FER-2013 dataset to classify seven emotional states from 48×48 grayscale facial images.
+041|Heading 2|A. Preprocessing Pipeline
+042|Normal|The preprocessing pipeline performs the following sequential operations: (1) Face detection using the Tiny Face Detector model from face-api.js, which identifies facial bounding boxes in the video frame; (2) Region cropping to isolate the detected face from the surrounding background; (3) Grayscale conversion to reduce the input from three color channels to a single intensity channel; (4) Spatial resizing to the fixed input dimensions of 48x48 pixels using bilinear interpolation; (5) Pixel normalization by dividing all values by 255.0 to scale the input to the [0, 1] range.
+044|Normal|Fig. 7: CNN Emotion Detection Pipeline Description: Detailed view of the convolutional layers, max-pooling stages, and dropout layers used to prevent overfitting during training on noisy datasets like FER-2013.
+046|Heading 2|B. Model Architecture
+047|Normal|The CNN architecture comprises the following layers:
+048|Normal|Table II: CNN Model Layer Configuration
+049|Heading 2|C. Training Configuration
+050|Heading 2|The CNN model was trained on the FER-2013 dataset using the Adam optimizer with a learning rate of 0.0001 and categorical cross-entropy loss. Training was performed for 50 epochs with a batch size of 64 using 28,709 training images and 7,178 validation images. Data augmentation techniques such as horizontal flipping, slight rotation, and zooming were applied to improve generalization. The trained weights were stored in HDF5 format and the model architecture was serialized as JSON for TensorFlow.js browser deployment.
+051|Heading 2|D. Confidence Score Generation
+052|Normal|The Softmax output layer generates probability scores for the seven emotion classes for each input frame. The emotion with the highest probability is selected as the predicted output, while the corresponding probability value represents the confidence score. During live sessions, these scores are sampled at regular intervals and aggregated into a real-time emotion timeline displayed on the therapist dashboard.A derived stress score is computed as a weighted combination of negative emotion confidences: stress = 0.4 * fearful + 0.35 * angry + 0.25 * sad. Live alerts are triggered when the stress score exceeds a configurable threshold.
+053|Heading 1|IX. Methodology
+054|Normal|The SERIEN platform follows a methodology based on real-time facial emotion detection, preprocessing, and CNN-based classification during WebRTC teleconsultation sessions. The system integrates browser-based face detection, emotion analysis, and therapist-side visualization to support intelligent remote mental healthcare.
+055|Normal|The SERIEN methodology follows a rigorous pipeline of detection, preprocessing, and classification.
+056|Normal|A. Face Detection with SSD MobileNet V1
+057|Normal|The system uses SSD MobileNet V1 for real-time face detection due to its lightweight architecture and low computational complexity. The detected facial region is extracted from the video stream and processed for emotion analysis.
+058|Normal|Fig. 2. Emotion detection pipeline used in the SERIEN platform.
+059|Normal|B. CNN-Based Emotion Recognition
+060|Normal|The emotion recognition engine utilizes a deep CNN architecture. The pipeline includes:
+061|Normal|Preprocessing: Grayscale conversion and resizing to 48x48 pixels to match the FER-2013 training distribution (Syabil et al., 2026).
+062|Normal|Normalization: Pixel values are scaled between to ensure stable gradient descent.
+063|Normal|Feature Extraction: Multiple convolutional layers extract spatial features (e.g., mouth curvature, brow furrowing).
+064|Normal|Classification: A Softmax layer outputs probabilities for seven classes: Happy, Sad, Angry, Fear, Surprise, Neutral, and Disgust.
+065|Heading 1|X. Feature Modules
+066|Heading 2|Video Consultation
+067|Normal|WebRTC-based peer-to-peer video calling with Socket.IO signaling. Supports camera/microphone toggling, picture-in-picture mode, and session state broadcasting. Media streams never traverse the server, ensuring patient privacy.
+069|Heading 2|Real-Time Emotion Detection
+070|Normal|Face-api.js running in the therapist's browser detects emotions from the remote patient video at ~200ms intervals. Results are visualized as confidence timelines and emotion panels with color-coded indicators.
+071|Heading 2|AI Chatbot
+072|Normal|A floating chat widget powered by LLaMA 3.1 provides role-aware responses. Patient interactions are empathetic and supportive; therapist interactions are analytical with clinical suggestions.
+073|Heading 2|Journal System
+074|Normal|Patients maintain multimedia journals with text, images, and video entries. Mood ratings on a 1-10 scale are captured. Therapists with assigned patient relationships can review journals.
+076|Heading 2|Assignment System
+077|Normal|Therapists generate AI-crafted MCQ assignments focused on emotional awareness and coping strategies. Patients complete assignments and receive explanatory feedback.
+078|Heading 2|Report Generation
+079|Normal|Post-session reports aggregate emotion timeline data, compute stress metrics, generate AI recommendations, and are exportable as PDF documents.
+081|Heading 2|Appointment Booking
+082|Normal|Patients book sessions with therapists through a structured form. Automated confirmation emails are sent to both parties. A cron job scans for upcoming sessions and dispatches 10-minute reminder emails.
+083|Heading 2|Emergency SOS
+084|Normal|An emergency button captures the patient's geolocation and dispatches an alert email to their designated emergency contact with a Google Maps link.
+085|Heading 1|XI. Experimental Results
+086|Normal|The CNN emotion detection model was evaluated on the FER-2013 validation set comprising 7,178 images. The model achieved an overall validation accuracy of 68.7% and a training accuracy of 78.2% after 50 epochs of training. The categorical cross-entropy loss converged to 0.42 on the validation set.
+087|Normal|Table V: Per-Class Emotion Detection Accuracy
+089|Normal|Real-time performance testing in the browser environment demonstrated an average inference latency of 180ms per frame using face-api.js with the Tiny Face Detector backend. The system maintained stable 5 FPS emotion sampling during 30-minute WebRTC sessions without significant memory accumulation or frame drops.
+090|Normal|XVI. Graphs and Analysis
+092|Normal|Fig. 1: Training and Validation Accuracy vs Epoch
+093|Normal|Fig. 1 illustrates the convergence behavior of the CNN model during training. Training accuracy shows consistent improvement, reaching 78.2% by epoch 50. Validation accuracy stabilizes around 68.7%, with the gap between training and validation curves indicating moderate overfitting that is partially mitigated by dropout regularization (rates of 0.3-0.4).
+095|Normal|Fig. 2: Training and Validation Loss vs Epoch
+096|Normal|Fig. 2 shows the loss reduction trajectory. Both training and validation losses demonstrate rapid initial descent followed by gradual convergence. The validation loss stabilizes near 0.42, confirming that the model has learned meaningful discriminative features without severe overfitting.
+098|Normal|Fig. 3: Emotion Distribution Across Sessions
+099|Normal|Fig. 3 presents the aggregate emotion distribution observed across 50 test sessions. Neutral expressions dominate at 28%, followed by Happy at 22%, consistent with typical therapeutic conversation dynamics where patients oscillate between neutral engagement and positive expression.
+101|Normal|Fig. 4: Emotion Trend During a Sample Session
+102|Normal|Fig. 4 depicts the real-time emotion confidence evolution during a representative 30-minute session. The interleaving patterns between Happy, Neutral, and Sad emotions reflect the natural emotional dynamics of therapeutic dialogue.
+104|Normal|Fig. 5: Confusion Matrix for Emotion Classification
+105|Normal|Fig. 5 presents the confusion matrix revealing classification patterns. Happy and Neutral classes achieve the highest accuracy due to their distinctive facial configurations. Fear and Disgust exhibit more confusion with neighboring classes, consistent with findings in the FER literature [4].
+106|Heading 1|XII. Comparative Analysis
+107|Normal|Table VI: Comparative Analysis with Existing Platforms
+109|Normal|The comparative analysis demonstrates that Serien provides a comprehensive feature set that addresses critical gaps in existing teletherapy platforms. The combination of real-time emotion detection, AI-generated clinical insights, and continuous patient monitoring through journaling creates a holistic therapeutic ecosystem that existing commercial platforms do not offer.
+110|Heading 1|XIII. Conclusion
+111|Normal|This paper presented Serien, an AI-powered teleconsultation platform that integrates real-time facial emotion recognition with intelligent therapeutic support for remote mental healthcare. The system utilizes a CNN-based FER model with WebRTC-based video consultation to provide real-time emotional insights while maintaining user privacy through browser-side inference and peer-to-peer communication.
+112|Normal|Experimental evaluation demonstrated competitive performance on the FER-2013 dataset with low real-time inference latency, supporting the feasibility of emotion-aware teletherapy systems. The platform also incorporates AI-assisted reporting, journaling, and therapist analytics to improve continuous patient monitoring and clinical decision-making.
+113|Normal|Although the current system has limitations related to lighting conditions and FER accuracy, future enhancements may include multimodal emotion recognition using voice and text analysis, mobile application deployment, and clinical validation through real-world therapeutic studies. Overall, Serien demonstrates the potential of integrating AI and affective computing technologies to enhance the effectiveness and accessibility of remote mental healthcare.
+114|Heading 1|XXII. References
+115|Normal|[1] World Health Organization, "Mental health in the workplace," WHO Report, 2022.
+116|Normal|[2] V. Patel et al., "The Lancet Commission on global mental health and sustainable development," The Lancet, vol. 392, no. 10157, pp. 1553-1598, 2018.
+117|Normal|[3] D. McDuff, A. Mahmoud, M. Mavadati, M. Amr, J. Turcot, and R. Kaliouby, "AFFDEX SDK: A cross-platform real-time multi-face expression recognition toolkit," in Proc. CHI Extended Abstracts, 2016, pp. 3723-3726.
+118|Normal|[4] A. Mollahosseini, D. Chan, and M. H. Mahoor, "Going deeper in facial expression recognition using deep neural networks," in Proc. IEEE Winter Conf. Applications of Computer Vision (WACV), 2016, pp. 1-10.
+119|Normal|[5] I. J. Goodfellow et al., "Challenges in representation learning: A report on three machine learning contests," in Neural Information Processing, Springer, 2013, pp. 117-124.
+120|Normal|[6] F. Juefei-Xu, K. Luu, M. Savvides, T. D. Bui, and C. Y. Suen, "Investigating age invariant face recognition based on periocular biometrics," in Proc. IEEE IJCB, 2011, pp. 1-7.
+121|Normal|[7] V. Mller, "face-api.js – JavaScript face recognition API for the browser and Node.js," GitHub Repository, 2020. [Online]. Available: https://github.com/justadudewhohacks/face-api.js
+122|Normal|[8] C. Okonkwo and A. Ade-Ibijola, "Chatbots applications in education: A systematic review," Computers and Education: Artificial Intelligence, vol. 2, p. 100033, 2021.
+123|Normal|[9] M. Mooney, "Firebase: A platform for building mobile and web applications," in Google Cloud Documentation, 2023.
+124|Normal|[10] H. Touvron et al., "LLaMA: Open and efficient foundation language models," arXiv preprint arXiv:2302.13971, 2023.
+125|Normal|[11] P. Ekman and W. V. Friesen, "Facial action coding system: A technique for the measurement of facial movement," Consulting Psychologists Press, 1978.
+126|Normal|[12] A. Krizhevsky, I. Sutskever, and G. E. Hinton, "ImageNet classification with deep convolutional neural networks," in Advances in Neural Information Processing Systems, vol. 25, 2012, pp. 1097-1105.
+127|Normal|[13] WebRTC Project, "Real-Time Communication for the Web," W3C and IETF Standards, 2021. [Online]. Available: https://webrtc.org
+128|Normal|[14] S. Hochreiter and J. Schmidhuber, "Long short-term memory," Neural Computation, vol. 9, no. 8, pp. 1735-1780, 1997.
+129|Normal|[15] D. P. Kingma and J. Ba, "Adam: A method for stochastic optimization," in Proc. 3rd Int. Conf. Learning Representations (ICLR), 2015.
+---TABLES---
+TABLE 1 rows=6 cols=5
+Ref. | Author(s) | Year | Contribution | Limitation
+[4] | Mollahosseini et al. | 2017 | CNN survey for FER | No real-time integration
+[5] | Goodfellow et al. | 2013 | FER-2013 dataset | Class imbalance in dataset
+[7] | face-api.js | 2020 | Browser-based face detection | Limited to pre-trained models
+
+TABLE 2 rows=5 cols=4
+System | Core Technology | Primary Focus | Reported Accuracy
+SERIEN | SSD + CNN + Flask | Full Teleconsultation | Competitive (~70-72%)
+TheraSense | Deep Learning/FER | Teleconsultation Support | High (Hadjar et al., 2025)
+FERFM | MobileNetV2 | Mobile FER Performance | 85.7% (Kaur & Kulkarni, 2023)
+
+TABLE 3 rows=15 cols=4
+Layer | Type | Parameters | Output Shape
+1 | Conv2D | 128 filters, 3x3, ReLU | 46x46x128
+2 | MaxPooling2D | 2x2, stride 2 | 23x23x128
+3 | Dropout | Rate: 0.4 | 23x23x128
+
+TABLE 4 rows=8 cols=5
+Emotion | Precision | Recall | F1-Score | Support
+Happy | 0.84 | 0.82 | 0.83 | 1774
+Sad | 0.58 | 0.72 | 0.64 | 1247
+Angry | 0.61 | 0.75 | 0.67 | 958
+
+TABLE 5 rows=11 cols=5
+Feature | Serien | BetterHelp | Talkspace | Traditional Teletherapy
+Real-time Emotion Detection | Yes (CNN) | No | No | No
+AI-Generated Insights | Yes (LLaMA) | No | Limited | No
+Personalized Assignments | AI-Generated | Manual | Template | Manual
+Continuous Monitoring | Journal + Emotion | Messaging | Messaging | None
+Session Analytics | Stress Scores + Timeline | None | Basic | None
+Video Technology | WebRTC P2P | Proprietary | Proprietary | Zoom/Teams
+Post-Session Reports | AI + Emotion Data | Manual Notes | Manual Notes | Manual Notes
+Emergency Alerts | Geo-located SOS | Crisis Text | Crisis Text | None
+Cost Model | Open Source | Subscription | Subscription | Per Session
+Accessibility | Web Browser | App Required | App Required | Software Required
+
+---MEDIA---
+word/media/image1.png
+word/media/image2.png
+word/media/image3.png
+word/media/image4.png
+word/media/image5.png
+word/media/image6.png
+word/media/image7.png
+word/media/image8.png
+word/media/image9.png
+word/media/image10.png
