@@ -1,12 +1,16 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, '') || ''
+import API_BASE, { API_ENDPOINTS, SOCKET_URL } from '../config/api'
+
+export { API_BASE, API_ENDPOINTS, SOCKET_URL }
 
 export function apiUrl(path) {
-  if (!path) return API_BASE_URL
+  if (!path) return API_BASE
   if (/^https?:\/\//i.test(path)) return path
-  if (!API_BASE_URL) return path
-  return `${API_BASE_URL}${path.startsWith('/') ? path : `/${path}`}`
+  if (!API_BASE) return path
+  return `${API_BASE}${path.startsWith('/') ? path : `/${path}`}`
 }
 
 export function socketUrl() {
-  return API_BASE_URL || undefined
+  return SOCKET_URL || undefined
 }
+
+export default API_BASE

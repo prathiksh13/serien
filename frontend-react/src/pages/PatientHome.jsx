@@ -20,6 +20,7 @@ import ChatWidget from '../components/ChatWidget'
 import ReportList from '../components/ReportList'
 import SessionList from '../components/SessionList'
 import { firebaseAuth, firestoreDb } from '../lib/firebase'
+import { API_ENDPOINTS } from '../config/api'
 
 function downloadTextFile(fileName, content) {
   const blob = new Blob([content], { type: 'text/plain;charset=utf-8' })
@@ -238,7 +239,7 @@ export default function PatientHome() {
         email: '',
       })
 
-      fetch('/send-booking-email', {
+      fetch(API_ENDPOINTS.bookingEmail, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

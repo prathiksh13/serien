@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { io } from 'socket.io-client'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { SOCKET_URL } from '../config/api'
 import CallTopbar from '../components/CallTopbar'
 import Sidebar from '../layout/Sidebar'
 import VideoControls from '../components/VideoControls'
@@ -414,7 +415,7 @@ export default function Patient() {
   }
 
   useEffect(() => {
-    const socket = io()
+    const socket = io(SOCKET_URL || window.location.origin)
 
     socketRef.current = socket
     sessionIdRef.current = getSessionId()

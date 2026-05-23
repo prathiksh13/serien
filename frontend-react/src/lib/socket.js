@@ -1,3 +1,5 @@
 import { io } from 'socket.io-client'
 
-export const socket = io()
+import { SOCKET_URL } from '../config/api'
+
+export const socket = io(SOCKET_URL || (typeof window !== 'undefined' ? window.location.origin : undefined))

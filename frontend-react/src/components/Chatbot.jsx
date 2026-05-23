@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { firebaseAuth } from '../lib/firebase'
+import { API_ENDPOINTS } from '../config/api'
 
 const FALLBACK_REPLY = 'I am here with you. Could you share a little more about what feels strongest right now?'
 
@@ -63,7 +64,7 @@ export default function Chatbot({ mode = 'patient' }) {
     try {
       const emotion = resolveDetectedEmotion()
       const token = await firebaseAuth?.currentUser?.getIdToken?.()
-      const response = await fetch('/api/chat', {
+      const response = await fetch(API_ENDPOINTS.chat, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

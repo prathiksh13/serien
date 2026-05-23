@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import MessageBubble from './MessageBubble'
+import { API_ENDPOINTS } from '../config/api'
 
 export default function ChatWindow({ mode = 'patient', context = {}, onClose }) {
   const endRef = useRef(null)
@@ -54,7 +55,7 @@ export default function ChatWindow({ mode = 'patient', context = {}, onClose }) 
     setIsSending(true)
 
     try {
-      const response = await fetch('/chat', {
+      const response = await fetch(API_ENDPOINTS.chat, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

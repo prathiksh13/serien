@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
 import { firestoreDb } from '../lib/firebase'
+import { API_ENDPOINTS } from '../config/api'
 
 export default function TherapistNotes({ therapistId, sessions = [] }) {
   const [selectedSessionId, setSelectedSessionId] = useState('')
@@ -30,7 +31,7 @@ export default function TherapistNotes({ therapistId, sessions = [] }) {
         savedAt: serverTimestamp(),
       })
 
-      fetch('/send-therapist-note', {
+      fetch(API_ENDPOINTS.therapistNote, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

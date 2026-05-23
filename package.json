@@ -7,6 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "react": "npm --prefix frontend-react run dev",
     "server": "node server.js",
+    "react-build": "npm --prefix frontend-react install && npm --prefix frontend-react run build",
     "ngrok": "ngrok http 3000",
     "dev": "concurrently \"npm run server\" \"npm run react\" \"npm run ngrok\"",
     "start": "node server.js"

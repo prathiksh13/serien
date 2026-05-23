@@ -17,6 +17,7 @@ import EmptyState from '../components/ui/EmptyState'
 import SectionHeader from '../components/ui/SectionHeader'
 import { useAuth } from '../context/AuthContext'
 import { firestoreDb } from '../lib/firebase'
+import { API_ENDPOINTS } from '../config/api'
 
 const MIN_AI_COUNT = 5
 const MAX_AI_COUNT = 10
@@ -459,7 +460,7 @@ export default function Assignments() {
     setGeneratingAi(true)
 
     try {
-      const response = await fetch('/api/assignments/generate', {
+      const response = await fetch(API_ENDPOINTS.assignments, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ count: safeCount }),

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { API_ENDPOINTS } from '../config/api'
 
 export default function EmergencyButton({ patientId, patientName, emergencyEmail }) {
   const [sending, setSending] = useState(false)
@@ -36,7 +37,7 @@ export default function EmergencyButton({ patientId, patientName, emergencyEmail
             },
           }
 
-          const response = await fetch('/send-emergency-email', {
+          const response = await fetch(API_ENDPOINTS.emergencyEmail, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

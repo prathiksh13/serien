@@ -13,6 +13,7 @@ import { generateReportPDF } from '../utils/generatePDF'
 import { buildSerienReport } from '../utils/reportBuilder'
 import { buildSessionMetadata, calculateStressScore, deriveMoodState } from '../utils/sessionAnalytics'
 import { firebaseAuth, firestoreDb } from '../lib/firebase'
+import { API_ENDPOINTS, SOCKET_URL } from '../config/api'
 
 const iceServers = [{ urls: 'stun:stun.l.google.com:19302' }]
 if (import.meta.env.VITE_TURN_URL && import.meta.env.VITE_TURN_USERNAME && import.meta.env.VITE_TURN_CREDENTIAL) {
@@ -60,9 +61,7 @@ function attachStreamToVideo(videoElement, stream, label, handlers = {}) {
 const TIMELINE_LIMIT = 30
 const STRESS_ALERT_THRESHOLD = 0.72
 const ALERT_COOLDOWN_MS = 4000
-const FACE_API_SCRIPT_CANDIDATES = [
-  '/face-api.js/dist/face-api.js',
-]
+const FACE_API_SCRIPT_CANDIDATES = ['/face-api.js/dist/face-api.js']
 const MODEL_URL = `${window.location.origin}/models`
 const MODEL_LOAD_TIMEOUT_MS = 15000
 const EMOTION_MODEL_OPTIONS = [
@@ -764,7 +763,7 @@ export default function Therapist() {
   }, [])
 
   useEffect(() => {
-    const socket = io()
+    const socket = io(SOCKET_URL || window.location.origin)
 
     socketRef.current = socket
     
@@ -1175,7 +1174,7 @@ export default function Therapist() {
 
     const reportRef = await addDoc(collection(firestoreDb, 'reports'), reportPayload)
 
-    fetch('/send-report-email', {
+    fetch(API_ENDPOINTS.reportEmail, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

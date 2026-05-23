@@ -26,7 +26,8 @@
     "react-router-dom": "^6.26.1",
     "recharts": "^3.8.1",
     "socket.io-client": "^4.8.3",
-    "three": "^0.183.2"
+    "three": "^0.183.2",
+    "tr": "file:.."
   },
   "devDependencies": {
     "@types/react": "^18.3.3",

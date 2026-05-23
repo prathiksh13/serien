@@ -6,6 +6,7 @@ import SearchBar from '../components/ui/SearchBar'
 import SectionHeader from '../components/ui/SectionHeader'
 import useUserRole from '../hooks/useUserRole'
 import { firestoreDb } from '../lib/firebase'
+import { API_ENDPOINTS } from '../config/api'
 import '../styles/journalReports.css'
 
 function formatJournalDate(createdAt) {
@@ -112,7 +113,7 @@ async function uploadJournalMedia(uid, files = []) {
       files.map(async (file, index) => {
         const safeName = String(file.name || `upload-${index + 1}`).replace(/[^a-zA-Z0-9._-]/g, '_')
         const base64Data = await fileToBase64(file)
-        const response = await fetch('/upload-journal-media', {
+        const response = await fetch(API_ENDPOINTS.uploadJournal, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

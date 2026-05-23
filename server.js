@@ -13,13 +13,39 @@ dotenv.config();
 
 const app = express();
 const server = http.createServer(app);
+const allowedOrigins = [
+  'http://localhost:5173',
+  process.env.APP_BASE_URL,
+].filter(Boolean);
+
 const io = new Server(server, {
   cors: {
-    origin: '*',
+    origin: allowedOrigins,
+    methods: ['GET', 'POST'],
+    credentials: true,
   },
 })
 
-const PORT = 3000;
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+
+  if (origin && allowedOrigins.includes(origin)) {
+    res.header('Access-Control-Allow-Origin', origin);
+    res.header('Vary', 'Origin');
+  }
+
+  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.header('Access-Control-Allow-Credentials', 'true');
+
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(204);
+  }
+
+  return next();
+});
+
+const PORT = Number(process.env.PORT || 3000);
 const FRONTEND_DIST = path.join(__dirname, 'frontend-react', 'dist');
 const JOURNAL_UPLOADS_DIR = path.join(__dirname, 'journal-uploads');
 const sessions = new Map();
@@ -30,7 +56,7 @@ const genAI = GEMINI_API_KEY ? new GoogleGenerativeAI(GEMINI_API_KEY) : null;
 const LLAMA_API_KEY = process.env.LLAMA_API_KEY;
 const GROQ_CHAT_COMPLETIONS_URL = 'https://api.groq.com/openai/v1/chat/completions';
 const GROQ_MODEL = normalizeGroqModel(process.env.LLAMA_MODEL || 'llama-3.1-8b-instant');
-const APP_BASE_URL = process.env.APP_BASE_URL || 'http://localhost:3000';
+const APP_BASE_URL = process.env.APP_BASE_URL || `http://localhost:${PORT}`;
 const FALLBACK_PROJECT_ID = process.env.FIREBASE_PROJECT_ID || 'therasense-b0c8a';
 const FIREBASE_STORAGE_BUCKET = process.env.FIREBASE_STORAGE_BUCKET || `${FALLBACK_PROJECT_ID}.appspot.com`;
 const USE_LOCAL_JOURNAL_UPLOADS = String(process.env.USE_LOCAL_JOURNAL_UPLOADS || 'true') !== 'false';
@@ -555,7 +581,6 @@ app.use('/models', express.static(path.join(__dirname, 'models')));
 app.use('/face-api.js', express.static(path.join(__dirname, 'face-api.js')));
 app.use('/journal-uploads', express.static(JOURNAL_UPLOADS_DIR));
 app.use(express.json({ limit: '20mb' }));
-app.use(express.static(FRONTEND_DIST));
 
 function sanitizeFileName(name = 'upload') {
   return String(name || 'upload').replace(/[^a-zA-Z0-9._-]/g, '_');
@@ -1306,7 +1331,6 @@ async function chatHandler(req, res) {
 }
 
 app.post('/api/chat', chatHandler);
-app.post('/chat', chatHandler);
 
 app.post('/api/assignments/generate', async (req, res) => {
   try {
@@ -1395,11 +1419,14 @@ cron.schedule('* * * * *', async () => {
   }
 });
 
-app.get(/.*/, (_req, res) => {
+app.use(express.static(FRONTEND_DIST));
+
+app.use((_req, res) => {
   res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
   res.setHeader('Pragma', 'no-cache');
   res.setHeader('Expires', '0');
   res.setHeader('Surrogate-Control', 'no-store');
+
   res.sendFile(path.join(FRONTEND_DIST, 'index.html'));
 });
 
@@ -1437,8 +1464,8 @@ io.on('connection', (socket) => {
 });
 
 server.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
-  console.log('Serving React app and Socket.IO from a single port (3000).');
+  console.log(`Server running on port ${PORT}`);
+  console.log('Serving React app and Socket.IO from a single port.');
 });
 
 

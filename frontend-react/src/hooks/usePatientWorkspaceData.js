@@ -13,6 +13,7 @@ import {
   where,
 } from 'firebase/firestore'
 import { firebaseAuth, firestoreDb } from '../lib/firebase'
+import { API_ENDPOINTS } from '../config/api'
 
 function parseReportPayload(data = {}, fallbackId = '') {
   const createdAt = data?.createdAt?.toDate ? data.createdAt.toDate() : null
@@ -191,7 +192,7 @@ export default function usePatientWorkspaceData() {
 
     const meetingLink = `${window.location.origin}/patient?sessionId=${docRef.id}`
 
-    fetch('/send-booking-email', {
+    fetch(API_ENDPOINTS.bookingEmail, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ sessionId: docRef.id, meetingLink }),
