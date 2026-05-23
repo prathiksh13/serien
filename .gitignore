@@ -82,7 +82,7 @@ weights/*-shard*
 # --------------------------------------------------
 # Project-specific generated libraries
 # --------------------------------------------------
-face-api.js/
+
 
 .env
 .env.*
@@ -97,3 +97,8 @@ firestore.rules
 architecture_2.png
 context_umanth.md
 deployement.md
+
+!face-api.js/
+!face-api.js/dist/
+!face-api.js/dist/face-api.min.js
+!face-api.js/dist/face-api.js
