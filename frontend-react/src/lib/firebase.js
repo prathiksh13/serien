@@ -7,13 +7,13 @@ import { getStorage } from 'firebase/storage'
 const storageBucket = import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "therasense-b0c8a.firebasestorage.app"
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAiX1RRxndc8kwTdS6S5vOoTTRNzVRKjfY",
-  authDomain: "therasense-b0c8a.firebaseapp.com",
-  projectId: "therasense-b0c8a",
+  apiKey: "................",
+  authDomain: "................",
+  projectId: ".................",
   storageBucket,
-  messagingSenderId: "648455984190",
-  appId: "1:648455984190:web:57e8b4fb9b1674f750ed6f",
-  measurementId: "G-824TY63N25"
+  messagingSenderId: "...............",
+  appId: "..................",
+  measurementId: ".............."
 };
 
 const app = initializeApp(firebaseConfig);
