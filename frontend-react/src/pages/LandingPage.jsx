@@ -92,7 +92,7 @@ export default function LandingPage() {
                 <img
                   alt="Dashboard Preview"
                   className="aspect-[4/3] w-full rounded-[24px] object-cover"
-                  src="C:\Users\prath\Desktop\serien-main\frontend-react\src\pages\image.png"
+                 src="/image4.png"
                 />
 
                 <div className="absolute -bottom-6 -left-6 max-w-xs rounded-2xl border border-white/40 bg-tg-50/80 p-6 shadow-xl backdrop-blur-xl">
