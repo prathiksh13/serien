@@ -578,7 +578,10 @@ async function sendTherapistFollowUpEmail(payload = {}) {
 }
 
 app.use('/models', express.static(path.join(__dirname, 'models')));
-app.use('/face-api.js', express.static(path.join(__dirname, 'face-api.js')));
+app.use(
+  '/face-api.js',
+  express.static(path.join(__dirname, 'public-face-api'))
+);
 app.use('/journal-uploads', express.static(JOURNAL_UPLOADS_DIR));
 app.use(express.json({ limit: '20mb' }));
 
