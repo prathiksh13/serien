@@ -61,7 +61,10 @@ function attachStreamToVideo(videoElement, stream, label, handlers = {}) {
 const TIMELINE_LIMIT = 30
 const STRESS_ALERT_THRESHOLD = 0.72
 const ALERT_COOLDOWN_MS = 4000
-const FACE_API_SCRIPT_CANDIDATES = ['/face-api.js/dist/face-api.js']
+const FACE_API_SCRIPT_CANDIDATES = [
+  '/face-api.js/face-api.js',
+  '/face-api.js/face-api.min.js',
+]
 const MODEL_URL = `${window.location.origin}/models`
 const MODEL_LOAD_TIMEOUT_MS = 15000
 const EMOTION_MODEL_OPTIONS = [
@@ -177,28 +180,62 @@ async function resolveFaceApiEndpoints() {
 }
 
 async function ensureFaceApiLoaded(scriptUrl) {
-  if (window.faceapi) return window.faceapi
+  if (window.faceapi) {
+    console.log('face-api already available on window')
+    return window.faceapi
+  }
 
   await new Promise((resolve, reject) => {
     const existing = document.querySelector('script[data-face-api="true"]')
+
     if (existing) {
-      existing.addEventListener('load', () => resolve(), { once: true })
-      existing.addEventListener('error', () => reject(new Error('Failed to load face-api.js')), { once: true })
+      console.log('Existing face-api script found')
+
+      existing.addEventListener(
+        'load',
+        () => {
+          console.log('Existing face-api script loaded successfully')
+          resolve()
+        },
+        { once: true }
+      )
+
+      existing.addEventListener(
+        'error',
+        () => {
+          console.error('Existing face-api script failed to load')
+          reject(new Error('Failed to load face-api.js'))
+        },
+        { once: true }
+      )
+
       return
     }
 
+    console.log('Loading face-api from:', scriptUrl)
+
     const script = document.createElement('script')
+
     script.src = scriptUrl
     script.async = true
     script.dataset.faceApi = 'true'
-    script.onload = () => resolve()
-    script.onerror = () => reject(new Error('Failed to load face-api.js'))
+
+    script.onload = () => {
+      console.log('face-api loaded successfully')
+      console.log('window.faceapi:', window.faceapi)
+      resolve()
+    }
+
+    script.onerror = (error) => {
+      console.error('face-api failed to load:', error)
+      reject(new Error('Failed to load face-api.js'))
+    }
+
     document.body.appendChild(script)
   })
 
   return window.faceapi
 }
-
 export default function Therapist() {
   const navigate = useNavigate()
   const location = useLocation()
